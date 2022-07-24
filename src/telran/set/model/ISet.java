@@ -1,2 +1,8 @@
-package telran.set.model;public interface ISet {
+package telran.set.model;
+
+public interface ISet<E> extends Iterable<E> {
+    boolean add (E element);
+    boolean remove(E element);
+    boolean contains(E element);
+    int size();
 }
