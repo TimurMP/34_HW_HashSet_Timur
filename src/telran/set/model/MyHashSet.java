@@ -83,26 +83,6 @@ public class MyHashSet<E> implements ISet<E> {
         }
         hashset=newHashSet;
 
-
-
-
-//        capacity = capacity * 2;
-//        LinkedList<E>[] newHashSet = new LinkedList[capacity];
-//        for (int i = 0; i < newHashSet.length; i++) {
-//            if (hashset[i] != null) {
-//                for (E e : hashset[i]) {
-//                    int index = getIndex(e);
-//                    if (newHashSet[index] == null) {
-//                        newHashSet[index] = new LinkedList<>();
-//                    }
-//                    newHashSet[index].add(e);
-//
-//                }
-//            }
-//            hashset = newHashSet;
-
-//        }
-
     }
 
     @Override
@@ -116,6 +96,14 @@ public class MyHashSet<E> implements ISet<E> {
             size--;
         }
         return res;
+    }
+
+
+    public void print(){
+        for (int i = 0; i < hashset.length; i++) {
+            System.out.println(hashset[i]);
+
+        }
     }
 
     @Override
@@ -134,14 +122,35 @@ public class MyHashSet<E> implements ISet<E> {
 
     @Override
     public Iterator<E> iterator() {
+
+
         return new Iterator<E>() {
+            int count = 0;
+            int bucket = 0;
             @Override
             public boolean hasNext() {
-                return false;
+                return count < capacity;
             }
 
             @Override
             public E next() {
+                if (hashset[count]!=null){
+                    int bSize = hashset[count].size();
+
+                    boolean bucketNotEmpty = bSize > 0;
+                    if (bucketNotEmpty & bucket <= bSize-1 ){
+                        E temp =  hashset[count].get(bucket);
+                        bucket++;
+                        return temp;
+                    }
+
+
+                }
+                //TODO: Possibly while loop (while hashet[count]==null || 0 -> count ++)
+                bucket = 0;
+
+                count++;
+
                 return null;
             }
         };
