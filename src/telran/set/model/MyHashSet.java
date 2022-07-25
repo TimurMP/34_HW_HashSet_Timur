@@ -127,13 +127,13 @@ public class MyHashSet<E> implements ISet<E> {
         return new Iterator<E>() {
             int count = 0;
             int bucket = 0;
+            E temp = null;
             @Override
             public boolean hasNext() {
                 return count < capacity;
             }
 
             @Override
-            //TODO: Possibly while loop (while hashet[count]==null || 0 -> count ++)
 
             public E next() {
                 if (hashset[count]==null){
@@ -142,22 +142,28 @@ public class MyHashSet<E> implements ISet<E> {
                     }
                 }
 
-                int bSize = hashset[count].size();
 
+                int bSize = hashset[count].size();
                 boolean bucketNotEmpty = bSize > 0;
-                E temp = null;
+
                 if (bucketNotEmpty & bucket <= bSize-1 ){
                     temp =  hashset[count].get(bucket);
                     bucket++;
+
                     if (bucket>bSize-1){
                         bucket = 0;
                         count++;
                     }
-                    return temp;
+//                    return temp;
+                }
+
+                if (hashset[count]!=null){
+                    if (hashset[count].size() == 0)
+                        count++;
                 }
 
 
-                count++;
+//                count++;
 
                 return temp;
 
