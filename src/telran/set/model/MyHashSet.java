@@ -133,25 +133,47 @@ public class MyHashSet<E> implements ISet<E> {
             }
 
             @Override
+            //TODO: Possibly while loop (while hashet[count]==null || 0 -> count ++)
+
             public E next() {
-                if (hashset[count]!=null){
-                    int bSize = hashset[count].size();
-
-                    boolean bucketNotEmpty = bSize > 0;
-                    if (bucketNotEmpty & bucket <= bSize-1 ){
-                        E temp =  hashset[count].get(bucket);
-                        bucket++;
-                        return temp;
+                if (hashset[count]==null){
+                    while (hashset[count] == null){
+                        count++;
                     }
-
-
                 }
-                //TODO: Possibly while loop (while hashet[count]==null || 0 -> count ++)
-                bucket = 0;
+
+                int bSize = hashset[count].size();
+
+                boolean bucketNotEmpty = bSize > 0;
+                E temp = null;
+                if (bucketNotEmpty & bucket <= bSize-1 ){
+                    temp =  hashset[count].get(bucket);
+                    bucket++;
+                    if (bucket>bSize-1){
+                        bucket = 0;
+                        count++;
+                    }
+                    return temp;
+                }
+
 
                 count++;
 
-                return null;
+                return temp;
+
+//                if (hashset[count]!=null){
+//                    int bSize = hashset[count].size();
+//
+//                    boolean bucketNotEmpty = bSize > 0;
+//                    if (bucketNotEmpty & bucket <= bSize-1 ){
+//                        E temp =  hashset[count].get(bucket);
+//                        bucket++;
+//                        return temp;
+//                    }
+//                }
+//                bucket = 0;
+//                count++;
+//                return null;
             }
         };
     }
