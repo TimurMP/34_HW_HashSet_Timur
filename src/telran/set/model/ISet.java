@@ -7,5 +7,7 @@ public interface ISet<E> extends Iterable<E> {
 
     boolean contains(E element);
 
+    void print();
+
     int size();
 }
