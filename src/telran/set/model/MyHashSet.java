@@ -32,7 +32,7 @@ public class MyHashSet<E> implements ISet<E> {
 
         int index = getIndex(element);
 
-        if (hashset[index] == null){
+        if (hashset[index] == null) {
             hashset[index] = new LinkedList<>();
         }
         if (hashset[index].contains(element)) {
@@ -68,38 +68,38 @@ public class MyHashSet<E> implements ISet<E> {
     @SuppressWarnings("unchecked")
 
     private void rebuildArray() {
-        capacity  = capacity * 2;
+        capacity = capacity * 2;
         LinkedList<E>[] newHashSet = new LinkedList[capacity];
         for (int i = 0; i < hashset.length; i++) {
-            if (hashset[i]!=null) {
+            if (hashset[i] != null) {
                 for (E e : hashset[i]) {
                     int index = getIndex(e);
-                    if (newHashSet[index] == null){
+                    if (newHashSet[index] == null) {
                         newHashSet[index] = new LinkedList<>();
                     }
                     newHashSet[index].add(e);
                 }
             }
         }
-        hashset=newHashSet;
+        hashset = newHashSet;
 
     }
 
     @Override
     public boolean remove(E element) {
         int index = getIndex(element);
-        if (hashset[index]==null){
+        if (hashset[index] == null) {
             return false;
         }
         boolean res = hashset[index].remove(element);
-        if (res){
+        if (res) {
             size--;
         }
         return res;
     }
 
 
-    public void print(){
+    public void print() {
         for (int i = 0; i < hashset.length; i++) {
             System.out.println(hashset[i]);
 
@@ -109,10 +109,10 @@ public class MyHashSet<E> implements ISet<E> {
     @Override
     public boolean contains(E element) {
         int index = getIndex(element);
-        if(hashset[index] == null){
+        if (hashset[index] == null) {
             return false;
         }
-        return  hashset[index].contains(element);
+        return hashset[index].contains(element);
     }
 
     @Override
@@ -128,58 +128,46 @@ public class MyHashSet<E> implements ISet<E> {
             int count = 0;
             int bucket = 0;
             E temp = null;
+
+            int empty = empty();
+
             @Override
             public boolean hasNext() {
                 return count < capacity;
             }
 
-            @Override
 
+            @Override
             public E next() {
-                if (hashset[count]==null){
-                    while (hashset[count] == null){
+                if (hashset[count] == null || hashset[count].isEmpty()) {
+                    while (hashset[count] == null || hashset[count].isEmpty()) {
                         count++;
                     }
                 }
-
 
                 int bSize = hashset[count].size();
-                boolean bucketNotEmpty = bSize > 0;
-
-                if (bucketNotEmpty & bucket <= bSize-1 ){
-                    temp =  hashset[count].get(bucket);
-                    bucket++;
-
-                    if (bucket>bSize-1){
-                        bucket = 0;
-                        count++;
-                    }
-//                    return temp;
+                temp = hashset[count].get(bucket);
+                bucket++;
+                if (bucket > bSize - 1) {
+                    bucket = 0;
+                    count++;
                 }
-
-                if (hashset[count]!=null){
-                    if (hashset[count].size() == 0)
-                        count++;
+                if (count == empty) {
+                    count = count + ((capacity) - empty);
+                    return temp;
                 }
-
-
-//                count++;
-
                 return temp;
 
-//                if (hashset[count]!=null){
-//                    int bSize = hashset[count].size();
-//
-//                    boolean bucketNotEmpty = bSize > 0;
-//                    if (bucketNotEmpty & bucket <= bSize-1 ){
-//                        E temp =  hashset[count].get(bucket);
-//                        bucket++;
-//                        return temp;
-//                    }
-//                }
-//                bucket = 0;
-//                count++;
-//                return null;
+            }
+
+            public int empty() {
+                int empty = 0;
+                for (int i = hashset.length - 1; hashset[i] == null || hashset[i].isEmpty(); i--) {
+                    empty = i;
+
+                }
+                return empty;
+
             }
         };
     }
